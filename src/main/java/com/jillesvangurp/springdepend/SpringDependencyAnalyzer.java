@@ -5,7 +5,9 @@ import com.google.gson.GsonBuilder;
 import com.jillesvangurp.springdepend.json.BeanDependency;
 import com.jillesvangurp.springdepend.json.BeanDependencyStatistic;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.GenericApplicationContext;
@@ -20,13 +22,13 @@ import static java.util.stream.Collectors.toMap;
  * Spring dependency analyzer that works with any GenericApplicationContext.
  */
 public class SpringDependencyAnalyzer {
-    private final GenericApplicationContext context;
+    private final ConfigurableListableBeanFactory beanFactory;
 
     /**
-     * @param context create your spring context the usual way and inject it here.
+     * @param beanFactory create your spring context the usual way and inject it here.
      */
-    public SpringDependencyAnalyzer(GenericApplicationContext context) {
-        this.context = context;
+    public SpringDependencyAnalyzer(ConfigurableListableBeanFactory beanFactory) {
+        this.beanFactory = beanFactory;
     }
 
     /**
@@ -36,7 +38,7 @@ public class SpringDependencyAnalyzer {
      */
     public Map<String, Set<String>> getBeanDependencies() {
         Map<String, Set<String>> beanDeps = new TreeMap<>();
-        ConfigurableListableBeanFactory factory = context.getBeanFactory();
+        ConfigurableListableBeanFactory factory = beanFactory;
         for (String beanName : factory.getBeanDefinitionNames()) {
             if (factory.getBeanDefinition(beanName).isAbstract()) {
                 continue;

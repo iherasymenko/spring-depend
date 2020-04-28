@@ -20,7 +20,7 @@ public class SpringDependencyAnalyzerTest extends AbstractTestNGSpringContextTes
     @BeforeMethod
     public void before() {
         GenericApplicationContext context =  (GenericApplicationContext) super.applicationContext;
-        analyzer = new SpringDependencyAnalyzer(context);
+        analyzer = new SpringDependencyAnalyzer(context.getBeanFactory());
     }
 
     public void shouldDumpReportWithoutExceptions() {
